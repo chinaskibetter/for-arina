@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>❤️</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 60px 40px;
+            border-radius: 25px;
+            text-align: center;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            overflow: visible;
+        }
+        
+        .message {
+            font-size: 28px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 50px;
+            line-height: 1.4;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: 600;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            font-family: inherit;
+        }
+        
+        .yes-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+        }
+        
+        .yes-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(238, 90, 82, 0.4);
+        }
+        
+        .no-btn {
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+            color: white;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+        
+        .no-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(68, 160, 141, 0.4);
+        }
+        
+        .heart {
+            font-size: 120px;
+            color: #ff6b6b;
+            animation: heartbeat 1.5s ease-in-out infinite;
+            text-shadow: 0 4px 8px rgba(255, 107, 107, 0.3);
+            margin: 30px 0;
+        }
+        
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(20px, -15px) rotate(5deg); }
+            50% { transform: translate(-15px, -25px) rotate(-3deg); }
+            75% { transform: translate(-20px, 10px) rotate(7deg); }
+        }
+        
+        .floating {
+            animation: float 0.5s ease-in-out;
+        }
+        
+        .sparkles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .sparkle {
+            position: absolute;
+            color: #ffd700;
+            font-size: 20px;
+            animation: sparkle 2s ease-in-out infinite;
+        }
+        
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1) rotate(180deg); }
+        }
+        
+        .music-note {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            color: #667eea;
+            animation: bounce 2s ease-in-out infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        audio {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="sparkles" id="sparkles"></div>
+    
+    <div class="container">
+        <div class="music-note">🎵</div>
+        
+        <div class="message">
+            Сидишь и учишь фронтенд? 💻
+        </div>
+        
+        <div class="buttons" id="buttons">
+            <button class="yes-btn" onclick="showHeart()">Да</button>
+            <button class="no-btn" id="noBtn" onclick="moveButton()">Нет</button>
+        </div>
+        
+        <div id="heartContainer"></div>
+    </div>
+    
+    <audio id="backgroundMusic" loop>
+        <source src="lera-masskva-7-jetazh_(muzzona.kz).mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        let moveCount = 0;
+        const maxMoves = 8;
+        
+        // Создание блесток
+        function createSparkles() {
+            const sparklesContainer = document.getElementById('sparkles');
+            for (let i = 0; i < 15; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.innerHTML = '✨';
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.top = Math.random() * 100 + '%';
+                sparkle.style.animationDelay = Math.random() * 2 + 's';
+                sparklesContainer.appendChild(sparkle);
+            }
+        }
+        
+        // Показать сообщение о включении музыки
+        function showHeart() {
+            const heartContainer = document.getElementById('heartContainer');
+            const buttons = document.getElementById('buttons');
+            const audio = document.getElementById('backgroundMusic');
+            
+            buttons.style.display = 'none';
+            heartContainer.innerHTML = '<div class="heart">🎵</div>';
+            
+            // Попытка включить музыку
+            audio.currentTime = 95; // 1 минута 35 секунд
+            audio.play().catch(e => console.log('Не удалось воспроизвести музыку автоматически'));
+            
+            setTimeout(() => {
+                heartContainer.innerHTML += '<div style="font-size: 24px; margin: 20px 0; color: #667eea;">Музыка включена! 🎶</div>';
+            }, 1000);
+        }
+        
+        // Перемещение кнопки "Нет"
+        function moveButton() {
+            const noBtn = document.getElementById('noBtn');
+            const container = document.querySelector('.container');
+            
+            moveCount++;
+            
+            noBtn.classList.add('floating');
+            
+            // Случайное перемещение кнопки
+            const containerRect = container.getBoundingClientRect();
+            const btnRect = noBtn.getBoundingClientRect();
+            
+            const maxX = containerRect.width - btnRect.width - 40;
+            const maxY = containerRect.height - btnRect.height - 40;
+            
+            const randomX = Math.random() * maxX;
+            const randomY = Math.random() * maxY;
+            
+            noBtn.style.position = 'absolute';
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+            
+            setTimeout(() => {
+                noBtn.classList.remove('floating');
+            }, 500);
+            
+            // Случайные фразы при попытке нажать "Нет"
+            const phrases = [
+                'Точно нет? 🤔',
+                'Может всё-таки да? 📚',
+                'Давай учиться! 💪',
+                'Фронтенд ждёт! 🚀',
+                'Не ленись! 😊',
+                'Код сам себя не напишет! 💻',
+                'Последний раз спрашиваю! 😏',
+                'Ладно, учи! 📖'
+            ];
+            
+            if (moveCount <= phrases.length) {
+                noBtn.innerHTML = phrases[moveCount - 1] || 'Нет';
+            }
+        }
+        
+        // Инициализация при загрузке
+        window.addEventListener('load', () => {
+            createSparkles();
+            
+            // Музыка будет включаться только при нажатии кнопки "Да"
+        });
+    </script>
+</body>
+</html>
