@@ -152,6 +152,21 @@
         audio {
             display: none;
         }
+        
+        @keyframes fadeIn {
+            0% { 
+                opacity: 0; 
+                transform: scale(0.8) translateY(20px); 
+            }
+            100% { 
+                opacity: 1; 
+                transform: scale(1) translateY(0); 
+            }
+        }
+        
+        .photo-container {
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -194,22 +209,32 @@
             }
         }
         
-        // Показать сообщение о включении музыки
+        // Показать фотографию и включить музыку
         function showHeart() {
             const heartContainer = document.getElementById('heartContainer');
             const buttons = document.getElementById('buttons');
             const audio = document.getElementById('backgroundMusic');
             
             buttons.style.display = 'none';
-            heartContainer.innerHTML = '<div class="heart">🎵</div>';
+            
+            // Создаем контейнер для фотографии
+            heartContainer.innerHTML = `
+                <div class="photo-container">
+                    <img src="foto.jpeg" alt="Фото" class="photo" style="
+                        max-width: 100%;
+                        max-height: 400px;
+                        border-radius: 15px;
+                        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+                        margin: 20px 0;
+                        animation: fadeIn 1s ease-in-out;
+                    ">
+                    <div style="font-size: 24px; margin: 20px 0; color: #667eea;">Ты котик! 🐱</div>
+                </div>
+            `;
             
             // Попытка включить музыку
             audio.currentTime = 95; // 1 минута 35 секунд
             audio.play().catch(e => console.log('Не удалось воспроизвести музыку автоматически'));
-            
-            setTimeout(() => {
-                heartContainer.innerHTML += '<div style="font-size: 24px; margin: 20px 0; color: #667eea;">Музыка включена! 🎶</div>';
-            }, 1000);
         }
         
         // Перемещение кнопки "Нет"
@@ -239,21 +264,7 @@
                 noBtn.classList.remove('floating');
             }, 500);
             
-            // Случайные фразы при попытке нажать "Нет"
-            const phrases = [
-                'Точно нет? 🤔',
-                'Может всё-таки да? 📚',
-                'Давай учиться! 💪',
-                'Фронтенд ждёт! 🚀',
-                'Не ленись! 😊',
-                'Код сам себя не напишет! 💻',
-                'Последний раз спрашиваю! 😏',
-                'Ладно, учи! 📖'
-            ];
-            
-            if (moveCount <= phrases.length) {
-                noBtn.innerHTML = phrases[moveCount - 1] || 'Нет';
-            }
+            // Текст кнопки остается неизменным - только анимация движения
         }
         
         // Инициализация при загрузке
